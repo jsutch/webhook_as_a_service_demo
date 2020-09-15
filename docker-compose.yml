@@ -1,0 +1,9 @@
+version: "3"
+services:
+  app:
+    build: ./app
+    security_opt:
+      - seccomp:unconfined
+    ports:
+    - "6666:6666"
+   
