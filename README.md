@@ -18,12 +18,20 @@ dk build -t "webhook:latest"  app/ && export DKID=$(dk run -d -p 6666:6666  webh
  Retries are enabled through the tenacity tool in worker.py for both the geturl() and cburl() methods. These examples are basic, but much more complex and robust logic is possible.
 [Tencity Github Page](https://github.com/jd/tenacity)
 
-** exponential backoff **  
-```@retry(reraise=True,wait=wait_exponential(),stop=stop_after_attempt(10))```
-** static retry after 2 seconds for 5 attempts **   
-```@retry(reraise=True,wait=wait_fixed(2), stop=stop_after_attempt(5))```
-** testing - static 1 second wait and 1 attempt **    
-```@retry(reraise=True,wait=wait_fixed(1), stop=stop_after_attempt(1))```
+**exponential backoff**  
+```
+@retry(reraise=True,wait=wait_exponential(),stop=stop_after_attempt(10))
+```
+
+**static retry after 2 seconds for 5 attempts**   
+```
+@retry(reraise=True,wait=wait_fixed(2), stop=stop_after_attempt(5))
+```
+
+**testing - static 1 second wait and 1 attempt**    
+```
+@retry(reraise=True,wait=wait_fixed(1), stop=stop_after_attempt(1))
+```
 
 #### Datastores
  The Datastores are sqlitedict and the tokens.db is populated with demo credentials at start - these can be found in tokens_intitialize.py. jobs.db and sessions.db are blank at start and reloading.
