@@ -15,7 +15,7 @@ dk build -t "webhook:latest"  app/ && export DKID=$(dk run -d -p 6666:6666  webh
 ```
 
 #### Retry/Backoff logic
- Retries are enabled through the tenacity tool in worker.py for both the geturl() and cburl() methods. These examples are basic, but much more complex and robust logic is possible.
+ Retries are enabled through the tenacity tool in worker.py for both the geturl() and cburl() methods. These examples are basic, but much more complex and robust logic is possible.  
 [Tenacity Github Page](https://github.com/jd/tenacity)
 
 **exponential backoff**  
