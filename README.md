@@ -11,6 +11,8 @@ The package will build into a single docker container that runs a flask app list
 You can build and start with this bash command line:
 ```bash
 alias dk='docker';
+alias dkps='dk exec $DKID ps -eaf';
+alias purge='docker image prune'
 dk build -t "webhook:latest"  app/ && export DKID=$(dk run -d -p 6666:6666  webhook) && dkps && sleep 5; dk exec $DKID ps -eaf
 ```
 
