@@ -63,6 +63,7 @@ __status__ = "Demo"
 # badurl = 'http://snout:7778/noservice'
 # goodurl = 'http://snout:7777/mostlygood'
 # junkurl = 'http://localhost:7777/noservice'
+# testurl = 'https://httpbin.org/post'
 
 
 # start logging
@@ -135,9 +136,12 @@ def updateStatus(jobid, newstatus, joboutput="Not Passing Job Output"):
 
 # Main API testing function
 # can customize retries and backoffs here
-# @retry(reraise=True,wait=wait_exponential(),stop=stop_after_attempt(10))
-# @retry(reraise=True,wait=wait_fixed(1), stop=stop_after_attempt(3))
-@retry(reraise=True,wait=wait_fixed(1), stop=stop_after_attempt(1)) # testing
+# exponential backoff - 
+@retry(reraise=True,wait=wait_exponential(),stop=stop_after_attempt(10))
+# static backoff - doesn't avoid "thundering herd" problem
+# @retry(reraise=True,wait=wait_fixed(3), stop=stop_after_attempt(5))
+# testing retry
+# @retry(reraise=True,wait=wait_fixed(1), stop=stop_after_attempt(1)) # testing
 def geturl(jobId):
     """
     Main executor logic. Retry logic is in the tenacity decorator.
