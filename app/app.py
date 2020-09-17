@@ -65,7 +65,7 @@ logging.basicConfig(filename='/var/www/webhook/app/app.log',level=logging.INFO)
 app = Flask(__name__)
 app.secret_key = creds.secret_key
 api = Api(app)
-
+jwt = JWTManager(app)
 
 # import JWT key
 app.config["JWT_SECRET_KEY"] = creds.JWT_SECRET_KEY
@@ -77,6 +77,7 @@ app.config["MONGODB_SETTINGS"] = {
     "host":"mongodb://storage/webhook?authSource=admin",
 }
 
+app.config['PROPAGATE_EXCEPTIONS'] = True # custom exceptions fail without this
 
 
 initialize_db(app)

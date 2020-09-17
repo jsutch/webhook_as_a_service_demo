@@ -1,24 +1,29 @@
 from .db import db
+from datetime import datetime
+from flask_bcrypt import generate_password_hash, check_password_hash
 
 # https://docs.mongoengine.org/guide/defining-documents.html
 
-class Job(db.Document):
+# "{'added_by', 'verify_token', 'callback', 'methodtype', 'service', 'data', 'client_id', 'headers'}"
+class Jobs(db.Document):
     """
     Handles all the job data
     """
-    jobId = db.UUIDField(required=True, unique=True)
+    # jobId = db.UUIDField(required=True, unique=True)
+    added_by = db.ReferenceField('User')
     status = db.StringField(required=True, max_length=16)
     notified = db.StringField(required=True, max_length=16)
-    sessionId = db.UUIDField(required=True, unique=True)
-    createdAt = db.DateTimeField(required=True, default=datetime.datetime.now)
-    updatedAt = db.DateTimeField(required=True, default=datetime.datetime.now)
-    output = db.StringField(required=True, unique=True)
-    notifyoutput = db.StringField(required=True, unique=True)
+    # sessionId = db.UUIDField(required=True, unique=True)
+    createdAt = db.DateTimeField(required=True, default=datetime.now)
+    updatedAt = db.DateTimeField(required=True, default=datetime.now)
+    output = db.StringField(required=False)
+    notifyoutput = db.StringField(required=False)
     # job data
-    clientCallback = db.URLField(required=True, unique=True)
-    clientHeaders = db.StringField(required=True, unique=True)
-    clientMethodType = db.StringField(required=True,max_length=16)
-    clientData = db.DictField(required=True)
+    service = db.URLField(required=True)
+    callback = db.URLField(required=True)
+    headers = db.DictField(required=True)
+    methodtype = db.StringField(required=True,max_length=16)
+    data = db.DictField(required=True)
 
 
 class User(db.Document):
@@ -26,9 +31,10 @@ class User(db.Document):
     Handles all the user/client data
     """
     email = db.EmailField(required=True, unique=True)
-    clientId =  db.EmailField(required=True, unique=True)
+    clientId =  db.StringField(required=True)
     password = db.StringField(required=True, min_length=16)
-    token = db.StringField(required=True, min_length=32, unique=True)
+    # token = db.StringField(required=True, min_length=32, unique=True)
+    jobs = db.ListField(db.ReferenceField('Jobs', reverse_delete_rule=db.PULL))
 
     def hash_password(self):
         self.password = generate_password_hash(self.password).decode('utf8')
@@ -46,5 +52,5 @@ class Sessions(db.Document):
     jobId = db.StringField(required=True, unique=True)
     sessionId = db.StringField(required=True, unique=True)
     clientId =  db.EmailField(required=True)
-    createdAt = db.DateTimeField(required=True, default=datetime.datetime.now)
-    updatedAt = db.DateTimeField(required=True, default=datetime.datetime.now)
+    createdAt = db.DateTimeField(required=True, default=datetime.now)
+    updatedAt = db.DateTimeField(required=True, default=datetime.now)
