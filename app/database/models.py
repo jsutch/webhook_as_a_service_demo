@@ -13,7 +13,7 @@ class Jobs(db.Document):
     added_by = db.ReferenceField('User')
     status = db.StringField(required=True, max_length=16)
     notified = db.StringField(required=True, max_length=16)
-    # sessionId = db.UUIDField(required=True, unique=True)
+    # sessionId = db.UUIDField(required=True, unique=True) #handled by jwt
     createdAt = db.DateTimeField(required=True, default=datetime.now)
     updatedAt = db.DateTimeField(required=True, default=datetime.now)
     output = db.StringField(required=False)
@@ -33,7 +33,7 @@ class User(db.Document):
     email = db.EmailField(required=True, unique=True)
     clientId =  db.StringField(required=True)
     password = db.StringField(required=True, min_length=16)
-    # token = db.StringField(required=True, min_length=32, unique=True)
+    # token = db.StringField(required=True, min_length=32, unique=True) # handled by jwt
     jobs = db.ListField(db.ReferenceField('Jobs', reverse_delete_rule=db.PULL))
 
     def hash_password(self):

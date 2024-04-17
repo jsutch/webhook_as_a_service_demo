@@ -1,6 +1,8 @@
 """
 Custom Errors
 """
+import requests 
+
 class InternalServerError(Exception):
     pass
 
@@ -33,6 +35,11 @@ class EmailDoesnotExistsError(Exception):
 
 class BadTokenError(Exception):
     pass
+
+# new additions to handle HTTP errors
+class ServerError(requests.exceptions.HTTPError):
+    pass
+
 
 errors = {
     "InternalServerError": {
@@ -78,5 +85,9 @@ errors = {
     "EmailDoesnotExistsError": {
         "message": "Couldn't find the user with given email address",
         "status": 400
+        },
+    "ServerError": {
+        "message": "HTTP Error",
+        "status": 666
         }
    }
